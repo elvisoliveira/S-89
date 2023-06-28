@@ -1,9 +1,10 @@
-const fs = require('fs');
+const pdfff = require('pdf-fill-form');
+const fields = require('./S-89.json');
+const filesys = require('fs');
 
 class S89 {
     constructor() {
         this.id = 900;
-        this.fields = require('./S-89.json');
 
         this.name = '';
         this.date = '';
@@ -24,7 +25,7 @@ class S89 {
 
     getData() {
         const data = {};
-        for (const [name, info] of Object.entries(this.fields)) {
+        for (const [name, info] of Object.entries(fields)) {
             data[`${this.id}_${info.id}_${info.type}`] = this[name];
         }
         return data;
@@ -32,8 +33,8 @@ class S89 {
 
     savePDF() {
         const self = this;
-        require('pdf-fill-form').writeBuffer(fs.readFileSync('S-89_T.pdf'), this.getData(), { "save": "pdf" } ).then(async function(result) {
-            fs.writeFile(`${self.date} ${self.name}.pdf`, result, function(err) {
+        pdfff.writeBuffer(filesys.readFileSync('S-89_T.pdf'), this.getData(), { "save": "pdf" } ).then(async function(result) {
+            filesys.writeFile(`${self.date} ${self.name}.pdf`, result, function(err) {
                 if(err) {
                     return console.log(err);
                 }
@@ -44,29 +45,34 @@ class S89 {
     }
 }
 
-const data = require('../07-jul.json');
-for (const meeting of data.meetings) {
-    if (!meeting.message) {
-        for (const [label, value] of Object.entries(meeting)) {
-            const doc = new S89();
-            doc.main_hall = true;
-            doc.date = meeting.date;
-            if (label === 'bible_reading') {
-                doc.name = value.reader;
-                doc.bible_reading = true;
-                doc.savePDF();
-            }
-            if(value.student) {
-                doc.name = value.student;
-                doc.assistant = value.assistant ?? '';
-                if(value.label) {
-                    doc.other = true;
-                    doc.other_text = value.label;
-                } else {
-                    doc[label] = true;
+const { program } = require('commander');
+
+program.argument('<file>', 'life and ministry meeting json schedule file name').action((file) => {
+    for (const meeting of require(`./${file}`).meetings) {
+        if (!meeting.message) {
+            for (const [label, value] of Object.entries(meeting)) {
+                const doc = new S89();
+                doc.main_hall = true;
+                doc.date = meeting.date;
+                if (label === 'bible_reading') {
+                    doc.name = value.reader;
+                    doc.bible_reading = true;
+                    doc.savePDF();
                 }
-                doc.savePDF();
+                if(value.student) {
+                    doc.name = value.student;
+                    doc.assistant = value.assistant ?? '';
+                    if(value.label) {
+                        doc.other = true;
+                        doc.other_text = value.label;
+                    } else {
+                        doc[label] = true;
+                    }
+                    doc.savePDF();
+                }
             }
         }
     }
-}
+});
+
+program.parse();

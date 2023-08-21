@@ -1,0 +1,3 @@
+[submodule "waarom-explorer"]
+	path = waarom-explorer
+	url = https://github.com/elvisoliveira/waarom-explorer

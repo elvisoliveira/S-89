@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "img": "for f in *.pdf; do pdftoppm -singlefile -f 1 -png \"$f\" \"$f\"; done"
+    "img": "for f in output/*.pdf; do pdftoppm -singlefile -f 1 -png \"$f\" \"$f\"; done"
   },
   "repository": {
     "type": "git",

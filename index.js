@@ -34,7 +34,8 @@ class S89 {
     savePDF() {
         const self = this;
         pdfff.writeBuffer(filesys.readFileSync('S-89_T.pdf'), this.getData(), { "save": "pdf" } ).then(async function(result) {
-            filesys.writeFile(`${self.date} ${self.name}.pdf`, result, function(err) {
+            const assistant = self.assistant.length > 0 ? ` & ${self.assistant}` : '';
+            filesys.writeFile(`output/${self.date} ${self.name}${assistant}.pdf`, result, function(err) {
                 if(err) {
                     return console.log(err);
                 }
@@ -62,11 +63,17 @@ program.argument('<file>', 'life and ministry meeting json schedule file name').
                 if(value.student) {
                     doc.name = value.student;
                     doc.assistant = value.assistant ?? '';
-                    if(value.label) {
+                    if(value.label && !["Primeira conversa", "Revisita", "Estudo bíblico"].includes(value.label)) {
                         doc.other = true;
                         doc.other_text = value.label;
                     } else {
                         doc[label] = true;
+                        switch (label) {
+                            case 'initial_call':
+                                doc.initial_call_text = value.advice; break;
+                            case  'return_visit':
+                                doc.return_visit_text = value.advice; break;
+                        }
                     }
                     doc.savePDF();
                 }

@@ -1,62 +1,30 @@
 {
+    "name": {
+        "id": 1,
+        "type": "Text_SanSerif"
+    },
     "assistant": {
         "id": 2,
-        "type": "Text"
-    },
-    "auxiliary_classroom_1": {
-        "id": 14,
-        "type": "CheckBox"
-    },
-    "auxiliary_classroom_2": {
-        "id": 15,
-        "type": "CheckBox"
-    },
-    "bible_reading": {
-        "id": 4,
-        "type": "CheckBox"
-    },
-    "bible_study": {
-        "id": 9,
-        "type": "CheckBox"
+        "type": "Text_SanSerif"
     },
     "date": {
         "id": 3,
-        "type": "Text"
+        "type": "Text_SanSerif"
     },
-    "initial_call": {
+    "part_number": {
+        "id": 4,
+        "type": "Text_SanSerif"
+    },
+    "main_hall": {
         "id": 5,
         "type": "CheckBox"
     },
-    "initial_call_text": {
+    "auxiliary_classroom_1": {
         "id": 6,
-        "type": "Text"
-    },
-    "main_hall": {
-        "id": 13,
         "type": "CheckBox"
     },
-    "name": {
-        "id": 1,
-        "type": "Text"
-    },
-    "other": {
-        "id": 11,
-        "type": "CheckBox"
-    },
-    "other_text": {
-        "id": 12,
-        "type": "Text"
-    },
-    "return_visit": {
+    "auxiliary_classroom_2": {
         "id": 7,
-        "type": "CheckBox"
-    },
-    "return_visit_text": {
-        "id": 8,
-        "type": "Text"
-    },
-    "talk": {
-        "id": 10,
         "type": "CheckBox"
     }
 }

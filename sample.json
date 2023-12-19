@@ -5,24 +5,26 @@
         {
             "message": "There is no meeting because of the <p>Memorial of Jesus' Death</p> on Tuesday April 4"
         }, {
-            "date"                     : "January 30",
-            "theme"                    : "1 CHRONICLES 7-9",
-            "chairman"                 : "Hal Jordan",
-            "opening_song"             : 58,
-            "middle_song"              : 78,
-            "closing_song"             : 23,
-            "closing_prayer"           : "Peter Parker",
-            "spiritual_gems"           : "Barry Allen",
-            "initial_call"             : { "label"  : "Memorial Invitation Video" },
-            "opening_talk"             : { "theme"      : "Talk theme"         , "speaker"   : "Steve Rogers"     },
-            "bible_reading"            : { "assignment" : "2 Chronicles 8:1-16", "reader"    : "Tony Stark"       },
-            "return_visit"             : { "student"    : "Barbara Gordon"     , "assistant" : "Gwen Stacy"       },
-            "bible_study"              : { "student"    : "Selina Kyle"        , "assistant" : "Mary Jane Watson" },
-            "talk"                     : { "theme"      : "Talk theme"         , "speaker"   : "Bruce Banner"     },
-            "congregation_bible_study" : { "conductor"  : "Bruce Wayne"        , "reader"    : "Clark Kent"       },
+            "date"                                 : "January 30",
+            "theme"                                : "1 CHRONICLES 7-9",
+            "chairman"                             : "Hal Jordan",
+            "opening_song"                         : 58,
+            "middle_song"                          : 78,
+            "closing_song"                         : 23,
+            "closing_prayer"                       : "Peter Parker",
+            "spiritual_gems"                       : "Barry Allen",
+            "initial_call"                         : { "label"     : "Memorial Invitation Video" },
+            "opening_talk"                         : { "theme"     : "Talk theme"         , "speaker": "Steve Rogers" },
+            "bible_reading"                        : { "assignment": "2 Chronicles 8:1-16", "reader" : "Tony Stark" },
+            "congregation_bible_study"             : { "conductor" : "Bruce Wayne"        , "reader" : "Clark Kent" },
+            "apply_yourself_to_the_field_ministry" : [
+                { "number": 4, "time": 3, "title": "Iniciando conversas", "assigned": "Barbara Gordon", "assistant": "Gwen Stacy" },
+                { "number": 5, "time": 5, "title": "Fazendo discípulos" , "assigned": "Selina Kyle"   , "assistant": "Mary Jane Watson" },
+                { "number": 6, "time": 4, "title": "Discurso"           , "assigned": "Bruce Banner" }
+            ],
             "living_as_christians": [
-                { "time": 10, "theme": "Local Needs", "speaker": "James Howlett" },
-                { "time": 30, "theme": "Service Talk: Theme", "speaker": "Eddie Brock"   }
+                { "time": 10, "theme": "Local Needs"        , "speaker": "James Howlett" },
+                { "time": 30, "theme": "Service Talk: Theme", "speaker": "Eddie Brock" }
             ]
         }
     ]

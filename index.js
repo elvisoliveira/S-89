@@ -3,22 +3,14 @@ const fields = require('./S-89.json');
 const filesys = require('fs');
 
 class S89 {
-    constructor() {
+    constructor(date) {
         this.id = 900;
 
         this.name = '';
-        this.date = '';
         this.assistant = '';
-        this.bible_reading = false;
-        this.initial_call = false;
-        this.initial_call_text = '';
-        this.return_visit = false;
-        this.return_visit_text = '';
-        this.bible_study = false;
-        this.talk = false;
-        this.other = false;
-        this.other_text = '';
-        this.main_hall = false;
+        this.date = date;
+        this.part_number = '';
+        this.main_hall = true;
         this.auxiliary_classroom_1 = false;
         this.auxiliary_classroom_2 = false;
     }
@@ -52,30 +44,21 @@ program.argument('<file>', 'life and ministry meeting json schedule file name').
     for (const meeting of require(`./${file}`).meetings) {
         if (!meeting.message) {
             for (const [label, value] of Object.entries(meeting)) {
-                const doc = new S89();
-                doc.main_hall = true;
-                doc.date = meeting.date;
                 if (label === 'bible_reading') {
+                    const doc = new S89(meeting.date);
                     doc.name = value.reader;
-                    doc.bible_reading = true;
+                    doc.part_number = 3;
                     doc.savePDF();
                 }
-                if(value.student) {
-                    doc.name = value.student;
-                    doc.assistant = value.assistant ?? '';
-                    if(value.label && !["Primeira conversa", "Revisita", "Estudo bíblico"].includes(value.label)) {
-                        doc.other = true;
-                        doc.other_text = value.label;
-                    } else {
-                        doc[label] = true;
-                        switch (label) {
-                            case 'initial_call':
-                                doc.initial_call_text = value.advice; break;
-                            case  'return_visit':
-                                doc.return_visit_text = value.advice; break;
-                        }
-                    }
-                    doc.savePDF();
+                if (label == 'apply_yourself_to_the_field_ministry') {
+                    value.forEach((assignment) => {
+                        if(!assignment.assigned) { return; }
+                        const doc = new S89(meeting.date);
+                        doc.name = assignment.assigned;
+                        doc.assistant = assignment.assistant ?? '';
+                        doc.part_number = assignment.number;
+                        doc.savePDF();
+                    });
                 }
             }
         }

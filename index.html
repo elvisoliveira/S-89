@@ -2,33 +2,192 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>S-89 Online</title>
-        <script src="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.js"></script>
+        <title>S-89</title>
+        <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.js"></script>
     </head>
     <body>
         <input type="file" />
+        <fieldset>
+            <legend>S-89</legend>
+
+            <dl>
+                <dt><label for="name">Name</label></dt>
+                <dd><input type="text" name="name" /></dd>
+            </dl>
+
+            <dl>
+                <dt><label for="assistant">Assistant</label></dt>
+                <dd><input type="text" name="assistant" /></dd>
+            </dl>
+
+            <dl>
+                <dt><label for="date">Date</label></dt>
+                <dd><input type="date" name="date" /></dd>
+            </dl>
+
+            <dl>
+                <dt><label for="part_number">Part n.</label></dt>
+                <dd><input type="number" name="part_number" /></dd>
+            </dl>
+
+            <fieldset>
+                <legend>To be given in:</legend>
+
+                <input type="checkbox" name="main_hall" checked />Main hall<br />
+                <input type="checkbox" name="auxiliary_classroom_1" />Auxiliary classroom 1<br />
+                <input type="checkbox" name="auxiliary_classroom_2" />Auxiliary classroom 2
+            </fieldset>
+        </fieldset>
+        <input type="submit" />
         <script type="text/javascript">
-            document.querySelector('input').addEventListener('change', function() {
-                var reader = new FileReader();
+            const fingerprints = [
+                [ "c13d94a8148dbeb4e0dee06f1844234a", "30adb6e10994a04c581f8f05689681fb" ], // Dutch                [S-89_O]
+                [ "a1d39d1a9dde564f60f0d79f6f723cfc", "fc8ec86bdc56847d9361c7226942175f" ], // English              [S-89_E]
+                [ "aacd852415010fed91252a89b62afbf5", "e26e6acd0b08074704c91488c21e4cde" ], // Amharic              [S-89_AM]
+                [ "1c3f79bea49cd098749574956c1a1ac0", "fbe3f2cf5f151042a3c57e0bf01b615f" ], // Arabic               [S-89_A]
+                [ "868f7e114f20dc64542befbd4e4cc9a2", "5a5555a14d460cc37901a978f40c8693" ], // Bulgarian            [S-89_BL]
+                [ "0c5898655ceb602dc33de27476c8f3ca", "7416fd668b473aa9c5c05f6724d59e08" ], // Chinese (simplified) [S-89_CHS]
+                [ "5e6ea361c5c3b3628fff9cef287792a8", "b633d5e2e47845f73e11cd6b3e3e0d56" ], // French               [S-89_F]
+                [ "df11fb5e7c61cbe05fd819fe53485ad1", "1c50d2ab39bb26633a537063dacc6a77" ], // Italian              [S-89_I]
+                [ "2360d0c5a8370e3dba62cdbbaf2c1fa4", "36b2b7b6106b7b4bb7193d1d45a12b6c" ], // Japanese             [S-89_J]
+                [ "6f56ffe5952946cded97ee17282652ff", "b3d27d8ffab807942ef764240186987d" ], // Kabuverdianu         [S-89_KBV]
+                [ "d0ec2f9e3dc2632f3303372f9fa2b99b", "3ef4d480cec90943295fddbae9ed3c47" ], // Papiamento           [S-89_PA]
+                [ "c58700290c03e8289fa0ffd1b0f74a66", "034648aeb02f8bd3ced52076b0c2ebf7" ], // Persian              [S-89_PR]
+                // Pidgin (West Africa)
+                [ "b9bc16eb3f5bb90b8c3f77b6ddb8b9a7", "1399c4627a61137d31314c07db2e468b" ], // Polish      [S-89_P]
+                [ "3d28d86db52314fb788a0082658f4bc0", "a961062e236951caa0a4aef36d52f58d" ], // Portuguese  [S-89_T]
+                [ "d716a99f61efb08f8ed1008ebf2e866d", "af8aea8d52dea2838da440248e686951" ], // Punjabi     [S-89_PJ]
+                [ "45130ca2c426cfccce546f1b73daaa0c", "fa3c69ccb8a72e83d498138f4bbafca6" ], // Romanian    [S-89_M]
+                [ "07f8df6c5a31a3fd95cbca5472db9ef9", "8dea773036e312f9bd1db9dcd2cd8a55" ], // Russian     [S-89_U]
+                [ "e23614e53cc93e8b882e733ad7e26f57", "6d312561ddc1105fc4499c9ad24c922f" ], // Spanish     [S-89_S]
+                [ "a0c25d3ee03cc61de9e3f24a6e56f4ef", "da8dc23d8de846af96d44d4ae53d5baa" ], // Sranantongo [S-89_SR]
+                [ "55ec3e24d7a6fcc85df25265d0c4fb3a", "af1df685760ba6b08a8adc629ef88271" ], // Tigrinya    [S-89_TI]
+                [ "ae7c31219c687e3a14e8f4bbce907a9d", "6575de530864ba199a75d1a67c86bab6" ], // Twi         [S-89_TW]
+            ];
+
+            const fields = {
+                name: {
+                    id: 1,
+                    type: "Text_SanSerif"
+                },
+                assistant: {
+                    id: 2,
+                    type: "Text_SanSerif"
+                },
+                date: {
+                    id: 3,
+                    type: "Text_SanSerif"
+                },
+                part_number: {
+                    id: 4,
+                    type: "Text_SanSerif"
+                },
+                main_hall: {
+                    id: 5,
+                    type: "CheckBox"
+                },
+                auxiliary_classroom_1: {
+                    id: 6,
+                    type: "CheckBox"
+                },
+                auxiliary_classroom_2: {
+                    id: 7,
+                    type: "CheckBox"
+                }
+            };
+
+            class S89 {
+                constructor(doc) {
+                    this.id = 900;
+
+                    this.name = '';
+                    this.assistant = '';
+                    this.date = '';
+                    this.part_number = '';
+                    this.main_hall = false;
+                    this.auxiliary_classroom_1 = false;
+                    this.auxiliary_classroom_2 = false;
+
+                    this.annotations = {};
+                    doc.getPage(1).then(content => content.getAnnotations()).then(annotations => {
+                        annotations.forEach(annotation => {
+                            this.annotations[annotation.fieldName] = annotation.id;
+                        });
+                    })
+
+                    this.doc = doc;
+                }
+
+                save() {
+                    Object.entries(fields).forEach(([name, info]) => {
+                        const id = this.annotations[`${this.id}_${info.id}_${info.type}`];
+                        this.doc.annotationStorage.setValue(id, { value: this[name] });
+                    });
+                    return this.doc.saveDocument();
+                }
+
+                savePDF() {
+                    this.save().then(byteArray => {
+                        const file = new Blob([byteArray], {
+                            type: 'application/pdf;base64'
+                        });
+                        window.open(URL.createObjectURL(file));
+                    });
+                }
+
+                saveImage() {
+                    this.save().then(data => {
+                        pdfjsLib.getDocument({
+                            data
+                        }).promise.then(doc => {
+                            doc.getPage(1).then(page => {
+                                const viewport = page.getViewport({
+                                    scale: 1.5
+                                });
+                                const canvas = document.createElement('canvas');
+                                canvas.width = viewport.width;
+                                canvas.height = viewport.height;
+                                page.render({
+                                    viewport,
+                                    canvasContext: canvas.getContext('2d')
+                                }).promise.then(() => {
+                                    window.open(canvas.toDataURL(), 'Image');
+                                });
+                            });
+                        });
+                    });
+                }
+            }
+
+            document.querySelector('input[type=file]').addEventListener('change', function() {
+                const reader = new FileReader();
                 reader.onload = function() {
                     pdfjsLib.disableWorker = true;
                     pdfjsLib.getDocument({
                         data: new Uint8Array(this.result)
-                    }).promise.then(pdf => {
-                        const fillIn = {};
-                        fillIn["12R"] = 'test';
-                        pdf.saveDocument({
-                          getAll: () => fillIn,
-                          resetModified: () => {},
-                        }).then(byteArray => {
-                            var file = new Blob([byteArray], { type: 'application/pdf;base64' });
-                            var fileURL = URL.createObjectURL(file);
-                            window.open(fileURL);
-                        });
+                    }).promise.then(doc => {
+                        if(!fingerprints.some(r => r.every((value, index) => doc.fingerprints[index] == value))) {
+                            alert('pdf not recognized'); return;
+                        }
+                        document.S89 = new S89(doc);
                     });
                 }
                 reader.readAsArrayBuffer(this.files[0]);
             }, false);
+
+            document.querySelector('input[type=submit]').addEventListener('click', function() {
+                if(!document.S89) return;
+                document.S89.name = document.querySelector('input[name=name]').value;
+                document.S89.date = document.querySelector('input[name=date]').value;
+                document.S89.assistant = document.querySelector('input[name=assistant]').value;
+                document.S89.part_number = document.querySelector('input[name=part_number]').value;
+                document.S89.main_hall = document.querySelector('input[name=main_hall]').checked;
+                document.S89.auxiliary_classroom_1 = document.querySelector('input[name=auxiliary_classroom_1]').checked;
+                document.S89.auxiliary_classroom_2 = document.querySelector('input[name=auxiliary_classroom_2]').checked;
+
+                document.S89.savePDF();
+                document.S89.saveImage();
+            });
         </script>
     </body>
 </html>

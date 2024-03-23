@@ -9,35 +9,33 @@
         <input type="file" />
         <fieldset>
             <legend>S-89</legend>
-
             <dl>
                 <dt><label for="name">Name</label></dt>
-                <dd><input type="text" name="name" /></dd>
+                <dd><input type="text" name="name" value="Julia Roberts" /></dd>
             </dl>
-
             <dl>
                 <dt><label for="assistant">Assistant</label></dt>
-                <dd><input type="text" name="assistant" /></dd>
+                <dd><input type="text" name="assistant" value="Sandra Bullock" /></dd>
             </dl>
-
             <dl>
                 <dt><label for="date">Date</label></dt>
                 <dd><input type="date" name="date" /></dd>
             </dl>
-
             <dl>
                 <dt><label for="part_number">Part n.</label></dt>
-                <dd><input type="number" name="part_number" /></dd>
+                <dd><input type="number" name="part_number" value="5" /></dd>
             </dl>
-
             <fieldset>
                 <legend>To be given in:</legend>
-
                 <input type="checkbox" name="main_hall" checked />Main hall<br />
                 <input type="checkbox" name="auxiliary_classroom_1" />Auxiliary classroom 1<br />
                 <input type="checkbox" name="auxiliary_classroom_2" />Auxiliary classroom 2
             </fieldset>
         </fieldset>
+        <select>
+            <option value="png">png</option>
+            <option value="pdf">pdf</option>
+        </select>
         <input type="submit" />
         <script type="text/javascript">
             const fingerprints = [
@@ -136,7 +134,8 @@
                 }
 
                 saveImage() {
-                    this.save().then(data => {
+                    const self = this;
+                    self.save().then(data => {
                         pdfjsLib.getDocument({
                             data
                         }).promise.then(doc => {
@@ -151,13 +150,19 @@
                                     viewport,
                                     canvasContext: canvas.getContext('2d')
                                 }).promise.then(() => {
-                                    window.open(canvas.toDataURL(), 'Image');
+                                    const link = document.createElement('a');
+                                    link.target = "_blank";
+                                    link.download = `Assignment of ${self.name} on ${self.date}.png`;
+                                    link.href= canvas.toDataURL().replace('image/png', 'image/octet-stream');
+                                    link.click();
                                 });
                             });
                         });
                     });
                 }
             }
+
+            document.querySelector('input[type=date]').valueAsDate = new Date();
 
             document.querySelector('input[type=file]').addEventListener('change', function() {
                 const reader = new FileReader();
@@ -176,17 +181,20 @@
             }, false);
 
             document.querySelector('input[type=submit]').addEventListener('click', function() {
-                if(!document.S89) return;
-                document.S89.name = document.querySelector('input[name=name]').value;
-                document.S89.date = document.querySelector('input[name=date]').value;
-                document.S89.assistant = document.querySelector('input[name=assistant]').value;
-                document.S89.part_number = document.querySelector('input[name=part_number]').value;
-                document.S89.main_hall = document.querySelector('input[name=main_hall]').checked;
-                document.S89.auxiliary_classroom_1 = document.querySelector('input[name=auxiliary_classroom_1]').checked;
-                document.S89.auxiliary_classroom_2 = document.querySelector('input[name=auxiliary_classroom_2]').checked;
+                if(!document.S89) {
+                    alert('pdf required'); return;
+                }
 
-                document.S89.savePDF();
-                document.S89.saveImage();
+                Object.entries(fields).forEach(([name, info]) => {
+                    document.S89[name] = document.querySelector(`input[name=${name}]`)[info.type == 'CheckBox' ? 'checked' : 'value'];
+                });
+
+                switch (document.querySelector('select').value) {
+                    case 'pdf':
+                        document.S89.savePDF(); break;
+                    case 'png':
+                        document.S89.saveImage(); break;
+                }
             });
         </script>
     </body>

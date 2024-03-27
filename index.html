@@ -8,9 +8,9 @@
 
     <link href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <script src="https://unpkg.com/pdf-lib@1.14.0"></script>
-    <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.js"></script>
-    <script src="https://unpkg.com/downloadjs@1.4.7"></script>
+    <script src="https://unpkg.com/pdf-lib@1.14.0/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://unpkg.com/downloadjs@1.4.7/download.min.js"></script>
 </head>
 
 <body>
@@ -162,7 +162,10 @@
             saveImage() {
                 const self = this;
                 self.save().then(data => {
-                    pdfjsLib.getDocument({ data }).promise.then(doc => {
+                    pdfjsLib.getDocument({
+                        data,
+                        standardFontDataUrl: 'https://unpkg.com/pdfjs-dist@3.11.174/standard_fonts/'
+                    }).promise.then(doc => {
                         doc.getPage(1).then(page => {
                             const viewport = page.getViewport({
                                 scale: 1.5
@@ -196,6 +199,7 @@
             const reader = new FileReader();
             reader.onload = function() {
                 pdfjsLib.disableWorker = true;
+                pdfjsLib.GlobalWorkerOptions.workerSrc = '//unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
                 pdfjsLib.getDocument({
                     data: new Uint8Array(this.result)
                 }).promise.then(doc => {

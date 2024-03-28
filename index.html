@@ -198,7 +198,6 @@
         document.querySelector('input[type=file]').addEventListener('change', function() {
             const reader = new FileReader();
             reader.onload = function() {
-                pdfjsLib.disableWorker = true;
                 pdfjsLib.GlobalWorkerOptions.workerSrc = '//unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
                 pdfjsLib.getDocument({
                     data: new Uint8Array(this.result)

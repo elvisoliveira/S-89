@@ -196,6 +196,7 @@
         }
         document.querySelector('input[type=date]').valueAsDate = new Date();
         document.querySelector('input[type=file]').addEventListener('change', function() {
+            const self = this;
             const reader = new FileReader();
             reader.onload = function() {
                 pdfjsLib.GlobalWorkerOptions.workerSrc = '//unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
@@ -204,6 +205,7 @@
                 }).promise.then(doc => {
                     if(!fingerprints.some(r => r.every((value, index) => doc.fingerprints[index] == value))) {
                         message('You need to get the .pdf file from the official sources');
+                        self.value = '';
                         return;
                     }
                     document.S89 = new S89(doc);
